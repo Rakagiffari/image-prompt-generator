@@ -1,22 +1,55 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
-# Load environment variables dari file .env
+
+# ==========================================
+# LOAD ENVIRONMENT VARIABLES
+# ==========================================
+
 load_dotenv()
 
-# Nama aplikasi
+
+# ==========================================
+# APP CONFIGURATION
+# ==========================================
+
 APP_NAME = "AI Image Prompt Generator"
 
-# API Keys
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# ==========================================
+# API KEY
+# ==========================================
+
+def get_secret(key):
+    """
+    Mengambil API key dari Streamlit Secrets.
+    Jika tidak tersedia, gunakan environment variable.
+    """
+
+    try:
+        value = st.secrets.get(key)
+
+        if value:
+            return value
+
+    except Exception:
+        pass
+
+    return os.getenv(key)
+
+
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+OPENAI_API_KEY = get_secret("OPENAI_API_KEY")
+
+
+# ==========================================
+# API STATUS
+# ==========================================
 
 def is_gemini_configured():
-    """Mengecek apakah Gemini API Key tersedia."""
     return bool(GEMINI_API_KEY)
 
 
 def is_openai_configured():
-    """Mengecek apakah OpenAI API Key tersedia."""
     return bool(OPENAI_API_KEY)
