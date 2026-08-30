@@ -5,10 +5,15 @@ from config import GEMINI_API_KEY
 
 
 def analyze_image(image_bytes, mime_type, instruction):
-    if not GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY belum dikonfigurasi.")
 
-    client = genai.Client(api_key=GEMINI_API_KEY)
+    if not GEMINI_API_KEY:
+        raise ValueError(
+            "GEMINI_API_KEY belum dikonfigurasi."
+        )
+
+    client = genai.Client(
+        api_key=GEMINI_API_KEY
+    )
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
