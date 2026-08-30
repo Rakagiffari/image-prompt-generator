@@ -1,3 +1,5 @@
+import base64
+
 from openai import OpenAI
 
 from config import OPENAI_API_KEY
@@ -14,6 +16,10 @@ def analyze_image(image_bytes, mime_type, instruction):
         api_key=OPENAI_API_KEY
     )
 
+    image_base64 = base64.b64encode(
+        image_bytes
+    ).decode("utf-8")
+
     response = client.responses.create(
         model="gpt-4.1-mini",
         input=[
@@ -28,9 +34,7 @@ def analyze_image(image_bytes, mime_type, instruction):
                         "type": "input_image",
                         "image_url": (
                             f"data:{mime_type};base64,"
-                            + __import__("base64")
-                            .b64encode(image_bytes)
-                            .decode("utf-8")
+                            f"{image_base64}"
                         )
                     }
                 ]
