@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 
 # ==========================================
-# LOAD ENVIRONMENT VARIABLES
+# LOAD ENVIRONMENT
 # ==========================================
 
 load_dotenv()
@@ -18,26 +18,38 @@ APP_NAME = "AI Image Prompt Generator"
 
 
 # ==========================================
-# API KEY
+# GET SECRET
 # ==========================================
 
 def get_secret(key):
     """
-    Mengambil API key dari Streamlit Secrets.
-    Jika tidak tersedia, gunakan environment variable.
+    Mengambil secret dari Streamlit Secrets.
+    Jika tidak tersedia, mengambil dari environment variable.
     """
 
+    # Prioritas 1: Streamlit Secrets
     try:
-        value = st.secrets.get(key)
+        if key in st.secrets:
+            value = st.secrets[key]
 
-        if value:
-            return value
+            if value:
+                return str(value).strip()
 
     except Exception:
         pass
 
-    return os.getenv(key)
+    # Prioritas 2: Environment Variable / .env
+    value = os.getenv(key)
 
+    if value:
+        return value.strip()
+
+    return None
+
+
+# ==========================================
+# API KEYS
+# ==========================================
 
 GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
 OPENAI_API_KEY = get_secret("OPENAI_API_KEY")
