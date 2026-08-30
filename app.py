@@ -1,6 +1,10 @@
 import streamlit as st
 
-from config import APP_NAME
+from config import (
+    APP_NAME,
+    is_gemini_configured,
+    is_openai_configured
+)
 
 st.set_page_config(
     page_title=APP_NAME,
@@ -10,15 +14,14 @@ st.set_page_config(
 
 st.title("✨ AI Image Prompt Generator")
 
-st.markdown(
-    """
-    ### Ubah gambar menjadi prompt AI
+st.subheader("API Configuration")
 
-    Upload sebuah gambar, lalu gunakan **Gemini** atau **OpenAI**
-    untuk menganalisis gambar dan menghasilkan prompt yang detail.
-    """
-)
+if is_gemini_configured():
+    st.success("✅ Gemini API Key terdeteksi")
+else:
+    st.error("❌ Gemini API Key belum dikonfigurasi")
 
-st.info(
-    "Gunakan menu di sebelah kiri untuk mulai membuat prompt."
-)
+if is_openai_configured():
+    st.success("✅ OpenAI API Key terdeteksi")
+else:
+    st.error("❌ OpenAI API Key belum dikonfigurasi")
